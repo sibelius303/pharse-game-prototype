@@ -122,7 +122,8 @@ export default function GuessTheWords() {
         if (inputs[i].every(l => l)) {
           replacement = inputs[i].join("");
         } else {
-          replacement = `___(${i + 1})___`;
+          // Mostrar tantos guiones bajos como letras tenga la palabra
+          replacement = wordObj.word.split("").map(() => "_").join(" ");
         }
         masked = masked.slice(0, start) + replacement + masked.slice(end);
         lastIndex = start + replacement.length;
@@ -223,20 +224,20 @@ export default function GuessTheWords() {
   }, [step, showNextPrompt]);
 
   return (
-    <div className="bg-white rounded-xl shadow-lg p-8 max-w-xl w-full flex flex-col items-center">
-      <div className="flex flex-col items-center mb-2">
-        <span className="text-sm font-semibold text-blue-900 mb-1">Nivel {step + 1} / {PHRASES.length}</span>
-        <h1 className="text-2xl font-bold text-center text-blue-900">
+    <div className="bg-[#0d1117] rounded-xl shadow-lg p-8 max-w-xl w-full flex flex-col items-center min-h-[600px]">
+      <div className="flex flex-col items-center mb-4">
+        <span className="text-sm font-semibold text-[#58a6ff] mb-2 bg-[#1f2937] px-3 py-1 rounded-full">Nivel {step + 1} / {PHRASES.length}</span>
+        <h1 className="text-3xl font-bold text-center text-white mb-2">
           Adivina las palabras faltantes
         </h1>
       </div>
-      <p className="text-lg mb-8 text-center text-blue-900 font-bold">
+      <p className="text-xl mb-10 text-center text-gray-200 font-mono tracking-wide leading-relaxed">
         {maskedPhrase()}
       </p>
       {!showNextPrompt && (
         <div className="flex flex-col gap-6 w-full mb-6">
           <div className="flex items-center gap-2 justify-center">
-            <span className="font-semibold text-blue-900 mr-2">{`Palabra (${current + 1}):`}</span>
+            <span className="font-semibold text-[#58a6ff] mr-2">{`Palabra (${current + 1}):`}</span>
             {Array(PHRASES[step].words[current].word.length)
               .fill(0)
               .map((_, j) => (
@@ -248,27 +249,27 @@ export default function GuessTheWords() {
                   value={inputs[current][j]}
                   onChange={e => handleLetterChange(j, e.target.value.replace(/[^a-zA-ZáéíóúüñÁÉÍÓÚÜÑ]/, ""))}
                   onKeyDown={e => handleLetterKeyDown(j, e)}
-                  className="border rounded px-2 py-2 w-8 text-center font-mono text-lg focus:outline-none focus:ring-2 focus:ring-blue-900 text-blue-900 font-bold"
+                  className="border border-[#30363d] bg-[#0d1117] rounded px-2 py-2 w-10 h-10 text-center font-mono text-xl focus:outline-none focus:ring-2 focus:ring-[#58a6ff] text-white font-bold transition-all hover:border-[#58a6ff]"
                   autoComplete="off"
                 />
               ))}
           </div>
           {/* Carrusel de pistas de la palabra actual */}
-          <div className="mt-2 text-center flex items-center justify-center gap-2">
+          <div className="mt-4 text-center flex items-center justify-center gap-3">
             <button
               onClick={handlePrevHint}
-              className="px-2 py-1 rounded bg-blue-200 text-blue-900 font-bold disabled:opacity-50"
+              className="px-3 py-2 rounded-lg bg-[#21262d] text-[#58a6ff] font-bold disabled:opacity-50 hover:bg-[#30363d] transition-colors border border-[#30363d] hover:border-[#58a6ff]"
               disabled={hintIndex === 0}
               aria-label="Pista anterior"
             >
               ◀
             </button>
-            <span className="text-md text-gray-700 bg-blue-100 rounded px-3 py-1 inline-block font-semibold min-w-[120px]">
+            <span className="text-md text-white bg-[#21262d] rounded-lg px-4 py-2 inline-block font-medium min-w-[200px] border border-[#30363d]">
               {PHRASES[step].words[current].hints[hintIndex]}
             </span>
             <button
               onClick={handleNextHint}
-              className="px-2 py-1 rounded bg-blue-200 text-blue-900 font-bold disabled:opacity-50"
+              className="px-3 py-2 rounded-lg bg-[#21262d] text-[#58a6ff] font-bold disabled:opacity-50 hover:bg-[#30363d] transition-colors border border-[#30363d] hover:border-[#58a6ff]"
               disabled={hintIndex === PHRASES[step].words[current].hints.length - 1}
               aria-label="Siguiente pista"
             >
@@ -277,7 +278,7 @@ export default function GuessTheWords() {
           </div>
           <button
             onClick={handleVerify}
-            className="bg-blue-900 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+            className="bg-[#238636] text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#2ea043] transition-colors mt-4 w-40 mx-auto"
           >
             Verificar
           </button>
